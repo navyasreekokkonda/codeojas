@@ -1,6 +1,10 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
+export const metadata = {
+  title: "CodeOjas",
+  description: "AI-powered DSA practice platform",
+};
 
 export default function RootLayout({
   children,
@@ -9,10 +13,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar />
-        {children}
-        <Footer />
+      <body className="bg-black text-white">
+        {/* Navbar must NOT block clicks */}
+        <div className="relative z-50">
+          <Navbar />
+        </div>
+
+        {/* Page content ABOVE everything */}
+        <main className="relative z-10">{children}</main>
       </body>
     </html>
   );
