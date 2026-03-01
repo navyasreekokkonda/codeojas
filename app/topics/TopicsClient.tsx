@@ -16,39 +16,50 @@ const TOPICS = [
 export default function TopicsClient() {
   const router = useRouter();
   const params = useSearchParams();
-
   const lang = params.get("lang") ?? "Python";
 
-  const handleClick = (topic: string) => {
-    router.push(
-      `/question?lang=${encodeURIComponent(lang)}&topic=${encodeURIComponent(topic)}`
-    );
+  const goToQuestion = (topic: string) => {
+    router.push(`/question?lang=${lang}&topic=${topic}`);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-3xl font-bold mb-6">
-        Select a DSA Topic ({lang})
+    <div
+      className="
+        min-h-screen
+        bg-black
+        text-white
+        pt-24
+        px-10
+        relative
+        z-10
+        pointer-events-auto
+      "
+    >
+      <h1 className="text-3xl font-bold mb-8">
+        Choose a DSA Topic ({lang})
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {TOPICS.map((topic) => (
           <button
             key={topic}
-            onClick={() => handleClick(topic)}
+            onClick={() => goToQuestion(topic)}
             className="
+              relative
+              z-20
+              pointer-events-auto
               bg-gray-900
               hover:bg-indigo-600
-              cursor-pointer
               transition
               p-6
               rounded-xl
-              text-left
               border border-gray-700
+              text-left
+              cursor-pointer
             "
           >
             <h3 className="text-lg font-semibold">{topic}</h3>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-gray-400">
               Practice {topic} problems
             </p>
           </button>
