@@ -1,20 +1,20 @@
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
-// ✅ rename import to avoid conflict
-const QuestionClientDynamic = dynamic(
+// ✅ renamed import — NO conflict now
+const QuestionClient = nextDynamic(
   () => import("./QuestionClient"),
   { ssr: false }
 );
 
-// ✅ this is required by Next.js
+// ✅ Next.js dynamic rendering flag
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default function QuestionPage() {
   return (
     <Suspense fallback={<div className="p-10 text-white">Loading question...</div>}>
-      <QuestionClientDynamic />
+      <QuestionClient />
     </Suspense>
   );
 }
