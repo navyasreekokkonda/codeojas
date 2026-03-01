@@ -1,13 +1,7 @@
 import { Suspense } from "react";
-import nextDynamic from "next/dynamic";
+import QuestionClient from "./QuestionClient";
 
-// ✅ renamed import — NO conflict now
-const QuestionClient = nextDynamic(
-  () => import("./QuestionClient"),
-  { ssr: false }
-);
-
-// ✅ Next.js dynamic rendering flag
+// ✅ Tell Next.js this page is dynamic (no static prerender)
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
