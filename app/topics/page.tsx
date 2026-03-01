@@ -21,7 +21,7 @@ export default function TopicsPage() {
   const lang = params.get("lang") || "Python";
 
   return (
-    <div className="min-h-screen bg-black text-white px-10 py-12 relative z-10">
+    <div className="pt-24 min-h-screen bg-black text-white px-10 relative z-20">
       <h1 className="text-3xl font-bold mb-8">
         Select a DSA Topic ({lang})
       </h1>
@@ -37,7 +37,7 @@ export default function TopicsPage() {
                 )}&topic=${encodeURIComponent(topic)}`
               )
             }
-            className="cursor-pointer text-left bg-gray-900 hover:bg-indigo-600 transition p-6 rounded-xl border border-gray-700"
+            className="cursor-pointer bg-gray-900 hover:bg-indigo-600 transition p-6 rounded-xl border border-gray-700 text-left"
           >
             <h3 className="text-xl font-semibold">{topic}</h3>
             <p className="text-gray-400 mt-2">
