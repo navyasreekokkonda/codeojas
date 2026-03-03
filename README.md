@@ -1,4 +1,6 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+you can check here -> codeojas.vercel.app and https://69a5bc56cce3d61f78c55f59--gleeful-snickerdoodle-180cc7.netlify.app/
+
 
 ## Getting Started
 
