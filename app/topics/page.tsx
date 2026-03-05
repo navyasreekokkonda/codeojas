@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const topics = ["Arrays", "Strings", "Stacks", "Queues"];
 const levels = ["Easy", "Medium", "Hard"];
 
-export default function TopicsPage() {
+function TopicsContent() {
 
   const searchParams = useSearchParams();
   const language = searchParams.get("lang") || "python";
@@ -24,7 +25,6 @@ export default function TopicsPage() {
           <h2 className="text-xl mb-2">{topic}</h2>
 
           <div className="flex gap-4">
-
             {levels.map((level) => (
               <Link
                 key={level}
@@ -34,12 +34,19 @@ export default function TopicsPage() {
                 {level}
               </Link>
             ))}
-
           </div>
 
         </div>
       ))}
 
     </div>
+  );
+}
+
+export default function TopicsPage() {
+  return (
+    <Suspense fallback={<div className="text-white p-10">Loading...</div>}>
+      <TopicsContent />
+    </Suspense>
   );
 }
