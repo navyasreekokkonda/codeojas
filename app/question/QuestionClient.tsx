@@ -8,9 +8,13 @@ import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
 import { oneDark } from "@codemirror/theme-one-dark";
 
+type Testcase = {
+  input: string;
+  expected: string;
+};
+
 export default function QuestionClient() {
   const params = useSearchParams();
-
   const lang = params.get("lang") || "Python";
   const topic = params.get("topic") || "Arrays";
   const level = params.get("level") || "Easy";
@@ -18,44 +22,82 @@ export default function QuestionClient() {
   const [question, setQuestion] = useState("Loading question...");
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
+  const [testcases, setTestcases] = useState<Testcase[]>([]);
 
+  // Load question + testcases
   useEffect(() => {
     fetch(`/api/generate?topic=${topic}&level=${level}`)
       .then((res) => res.json())
-      .then((data) => setQuestion(data.question))
+      .then((data) => {
+        setQuestion(data.question || "Problem not found.");
+        setTestcases(data.testcases || []);
+      })
       .catch(() => setQuestion("Failed to load question"));
   }, [topic, level]);
 
-  const handleSubmit = () => {
-    if (!code.trim()) {
-      setResult("❌ Please write code before submitting.");
-      return;
-    }
-
-    setResult("⏳ AI is analyzing your solution...");
-
-    setTimeout(() => {
-      if (
-        code.includes("print") ||
-        code.includes("console.log") ||
-        code.includes("return")
-      ) {
-        setResult("✅ Correct logic detected! Try the next level 🚀");
-      } else {
-        setResult(
-          "❌ Error detected:\nYou did not output the result.\n\n✅ Fix:\nprint(result)"
-        );
-      }
-    }, 1500);
-  };
-
-  // Select CodeMirror language based on `lang`
+  // Determine CodeMirror language
   const languageExtension =
     lang === "Python"
       ? python()
       : lang === "JavaScript"
       ? javascript()
       : java();
+
+  const handleSubmit = async () => {
+    if (!code.trim()) {
+      setResult("❌ Please write code before submitting.");
+      return;
+    }
+
+    if (testcases.length === 0) {
+      setResult("⚠️ No testcases found for this problem.");
+      return;
+    }
+
+    setResult("⏳ Running code against testcases...");
+
+    let passed = 0;
+
+    const outputs: string[] = [];
+
+    for (let i = 0; i < testcases.length; i++) {
+      const tc = testcases[i];
+
+      try {
+        const res = await fetch("/api/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code,
+            language: lang,
+            stdin: tc.input,
+          }),
+        });
+
+        const data = await res.json();
+        const output = data.output?.trim() || "";
+        const status = output === tc.expected.trim() ? "✅ Passed" : "❌ Failed";
+
+        if (status === "✅ Passed") passed++;
+
+        outputs.push(
+          `Testcase ${i + 1}: ${status}\nInput: ${tc.input}\nOutput: ${output}\nExpected: ${tc.expected}\n`
+        );
+      } catch (err) {
+        outputs.push(
+          `Testcase ${i + 1}: ❌ Error\nError: ${(err as Error).message}`
+        );
+      }
+    }
+
+    const score = Math.floor((passed / testcases.length) * 100);
+
+    setResult(
+      `🏆 Score: ${score}/100 | Passed: ${passed}/${testcases.length}\n\n${outputs.join(
+        "\n"
+      )}`
+    );
+  };
 
   return (
     <div className="min-h-screen bg-black text-white p-10">
@@ -65,20 +107,19 @@ export default function QuestionClient() {
       </h1>
       <p className="text-gray-400 mb-6">Language: {lang}</p>
 
-      {/* LEFT-RIGHT LAYOUT */}
+      {/* Left-Right Layout */}
       <div className="flex gap-6">
 
-        {/* LEFT SIDE — QUESTION */}
-        <div className="w-1/2 bg-gray-900 p-6 rounded-xl">
+        {/* LEFT — Problem */}
+        <div className="w-1/2 bg-gray-900 p-6 rounded-xl overflow-y-auto max-h-[80vh]">
           <h2 className="font-semibold mb-4 text-lg">Problem Statement</h2>
           <p className="text-gray-300 whitespace-pre-wrap">{question}</p>
         </div>
 
-        {/* RIGHT SIDE — COMPILER */}
-        <div className="w-1/2 bg-gray-900 p-6 rounded-xl">
+        {/* RIGHT — Editor + Submit */}
+        <div className="w-1/2 bg-gray-900 p-6 rounded-xl flex flex-col">
           <h2 className="font-semibold mb-4 text-lg">Compiler</h2>
 
-          {/* CodeMirror Editor */}
           <CodeMirror
             value={code}
             height="300px"
@@ -96,7 +137,7 @@ export default function QuestionClient() {
           </button>
 
           {result && (
-            <pre className="mt-4 p-4 bg-black border border-gray-700 rounded-lg whitespace-pre-wrap">
+            <pre className="mt-4 p-4 bg-black border border-gray-700 rounded-lg whitespace-pre-wrap overflow-x-auto">
               {result}
             </pre>
           )}
