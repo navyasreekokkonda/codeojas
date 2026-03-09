@@ -2,6 +2,11 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { python } from "@codemirror/lang-python";
+import { javascript } from "@codemirror/lang-javascript";
+import { java } from "@codemirror/lang-java";
+import { oneDark } from "@codemirror/theme-one-dark";
 
 export default function QuestionClient() {
   const params = useSearchParams();
@@ -44,16 +49,23 @@ export default function QuestionClient() {
     }, 1500);
   };
 
+  // Select CodeMirror language based on `lang`
+  const languageExtension =
+    lang === "Python"
+      ? python()
+      : lang === "JavaScript"
+      ? javascript()
+      : java();
+
   return (
     <div className="min-h-screen bg-black text-white p-10">
-      
       {/* Header */}
       <h1 className="text-3xl font-bold mb-2">
         {topic} ({level})
       </h1>
       <p className="text-gray-400 mb-6">Language: {lang}</p>
 
-      {/* LEFT RIGHT LAYOUT */}
+      {/* LEFT-RIGHT LAYOUT */}
       <div className="flex gap-6">
 
         {/* LEFT SIDE — QUESTION */}
@@ -64,19 +76,21 @@ export default function QuestionClient() {
 
         {/* RIGHT SIDE — COMPILER */}
         <div className="w-1/2 bg-gray-900 p-6 rounded-xl">
-
           <h2 className="font-semibold mb-4 text-lg">Compiler</h2>
 
-          <textarea
+          {/* CodeMirror Editor */}
+          <CodeMirror
             value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder={`Write your ${lang} code here...`}
-            className="w-full h-64 bg-black text-white p-4 rounded-lg border border-gray-700"
+            height="300px"
+            theme={oneDark}
+            extensions={[languageExtension]}
+            onChange={(value) => setCode(value)}
+            className="mb-4 rounded-lg"
           />
 
           <button
             onClick={handleSubmit}
-            className="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg"
+            className="mt-2 px-6 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg"
           >
             Submit Code
           </button>
@@ -86,11 +100,9 @@ export default function QuestionClient() {
               {result}
             </pre>
           )}
-
         </div>
 
       </div>
-
     </div>
   );
 }
