@@ -9,7 +9,7 @@ export default function CompilerPage() {
   const [error, setError] = useState("");
   const [history, setHistory] = useState<string[]>([]);
 
-  const language = "Python"; // later dynamic
+  const language = "Python";
   const problem =
     "Given an array of integers, find the maximum element in the array.";
 
@@ -46,16 +46,28 @@ export default function CompilerPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
+    <div className="flex min-h-screen bg-black text-white relative overflow-hidden">
+
+      {/* Background Glow */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-orange-500 opacity-20 blur-[120px]"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-500 opacity-20 blur-[120px]"></div>
+
       {/* HISTORY SIDEBAR */}
-      <aside className="w-64 bg-gray-900 p-4 hidden md:block">
-        <h3 className="text-lg font-semibold mb-4">🕒 History</h3>
+      <aside className="w-64 bg-black/60 backdrop-blur-lg border-r border-white/10 p-5 hidden md:block relative z-10">
+        <h3 className="text-lg font-semibold mb-4 text-orange-400">
+          🕒 History
+        </h3>
+
         {history.length === 0 && (
-          <p className="text-gray-400 text-sm">No submissions yet</p>
+          <p className="text-gray-500 text-sm">No submissions yet</p>
         )}
+
         <ul className="space-y-2 text-sm">
           {history.map((item, i) => (
-            <li key={i} className="text-gray-300 truncate">
+            <li
+              key={i}
+              className="text-gray-300 truncate hover:text-orange-400 transition"
+            >
               • {item}
             </li>
           ))}
@@ -63,26 +75,30 @@ export default function CompilerPage() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-8 relative z-10">
+
         {/* HEADER */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-indigo-400">
-            CodeOjas Compiler
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">
+            <span className="text-orange-500">CodeOjas</span> Compiler
           </h1>
-          <span className="bg-indigo-600 px-3 py-1 rounded text-sm">
+
+          <span className="bg-orange-500/20 border border-orange-500 text-orange-400 px-3 py-1 rounded-lg text-sm">
             {language}
           </span>
         </div>
 
         {/* PROBLEM */}
-        <div className="bg-gray-900 p-4 rounded-lg mb-4">
-          <h2 className="font-semibold mb-2">📘 Problem</h2>
+        <div className="backdrop-blur-lg bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 hover:border-orange-500 transition">
+          <h2 className="font-semibold mb-2 text-orange-400">
+            📘 Problem
+          </h2>
           <p className="text-gray-300">{problem}</p>
         </div>
 
-        {/* ERROR BADGE */}
+        {/* ERROR */}
         {error && (
-          <div className="bg-red-600/20 border border-red-600 p-3 rounded mb-4">
+          <div className="bg-red-500/10 border border-red-500 p-3 rounded mb-5">
             {error}
           </div>
         )}
@@ -92,23 +108,44 @@ export default function CompilerPage() {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder={`Write your ${language} code here...`}
-          className="w-full h-64 bg-gray-950 p-4 rounded-lg font-mono text-sm border border-gray-700 focus:outline-none"
+          className="w-full h-72 bg-black border border-white/10 p-4 rounded-xl font-mono text-sm text-gray-200 focus:outline-none focus:border-orange-500 transition"
         />
 
-        {/* SUBMIT */}
+        {/* SUBMIT BUTTON */}
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="mt-4 bg-green-600 px-6 py-3 rounded-lg font-semibold"
+          className="
+          mt-6
+          px-8
+          py-3
+          rounded-xl
+          font-semibold
+          text-white
+          bg-gradient-to-r
+          from-orange-500
+          via-orange-400
+          to-yellow-500
+          bg-[length:200%_200%]
+          animate-[gradientMove_4s_ease_infinite]
+          shadow-lg shadow-orange-500/30
+          hover:scale-105
+          transition
+          "
         >
-          {loading ? "Analyzing..." : "Submit Code"}
+          {loading ? "Analyzing..." : "🚀 Submit Code"}
         </button>
 
         {/* AI OUTPUT */}
         {output && (
-          <div className="mt-6 bg-gray-900 p-4 rounded-lg">
-            <h3 className="font-semibold mb-2">🤖 AI Feedback</h3>
-            <p className="text-gray-300 whitespace-pre-line">{output}</p>
+          <div className="mt-8 backdrop-blur-lg bg-white/5 border border-white/10 p-6 rounded-2xl hover:border-orange-500 transition">
+            <h3 className="font-semibold mb-3 text-orange-400">
+              🤖 AI Feedback
+            </h3>
+
+            <p className="text-gray-300 whitespace-pre-line">
+              {output}
+            </p>
           </div>
         )}
       </main>

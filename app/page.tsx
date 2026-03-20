@@ -1,96 +1,71 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const languages = ["Python", "JavaScript", "Java"];
 
 export default function HomePage() {
+  const router = useRouter();
+  const [selectedLang, setSelectedLang] = useState("Python");
+
+  const handleStart = () => {
+    router.push(`/topics?lang=${selectedLang}`);
+  };
+
+  const handleLearn = () => {
+    router.push("/learn");
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      
-      {/* Background glow (NON-BLOCKING) */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-black to-black pointer-events-none" />
-
-      {/* NAVBAR */}
-      <nav className="relative z-20 flex justify-between items-center px-8 py-6">
-        <h1 className="text-2xl font-bold text-indigo-400">CodeOjas</h1>
-
-        <div className="space-x-4">
-          <Link href="/login">
-            <button className="px-4 py-2 rounded-lg border border-gray-700 hover:border-indigo-500">
-              Login
-            </button>
-          </Link>
-
-          <Link href="/signup">
-            <button className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700">
-              Sign Up
-            </button>
-          </Link>
-        </div>
-      </nav>
-
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
       {/* HERO */}
-      <section className="relative z-20 flex flex-col items-center text-center px-6 mt-20">
-        <h2 className="text-5xl font-extrabold mb-6">
-          Master DSA with <span className="text-indigo-500">AI Guidance</span>
-        </h2>
+      <h1 className="text-5xl font-bold mb-6 text-center">
+        Master Coding with Practice and Learning
+      </h1>
 
-        <p className="text-gray-400 max-w-2xl mb-10 text-lg">
-          Practice topic-wise DSA problems, solve them in your favorite language,
-          and let AI analyze your solution step-by-step like a real mentor.
-        </p>
+      <p className="text-gray-400 max-w-2xl text-center mb-10">
+        A complete platform to practice data structures and algorithms,
+        learn programming step by step, and prepare for interviews.
+      </p>
 
-        {/* START CODING (NO LOGIN REQUIRED) */}
-        <Link href="/language">
-          <button className="px-8 py-4 text-lg rounded-xl bg-indigo-600 hover:bg-indigo-700 transition cursor-pointer">
-            🚀 Start Coding
-          </button>
-        </Link>
-      </section>
+      {/* LANGUAGE SELECT */}
+      <div className="flex gap-6 mb-10">
+        {languages.map((lang) => (
+          <div
+            key={lang}
+            onClick={() => setSelectedLang(lang)}
+            className={`
+              cursor-pointer px-6 py-4 rounded-lg border transition
+              ${
+                selectedLang === lang
+                  ? "bg-orange-500 border-orange-500 text-white"
+                  : "bg-gray-900 border-gray-700 text-gray-300"
+              }
+            `}
+          >
+            {lang}
+          </div>
+        ))}
+      </div>
 
-      {/* FEATURES */}
-      <section className="relative z-20 mt-24 px-10">
-        <h3 className="text-3xl font-bold text-center mb-12">
-          Why CodeOjas?
-        </h3>
+      {/* BUTTONS */}
+      <div className="flex gap-4">
+        <button
+          onClick={handleStart}
+          className="bg-orange-500 hover:bg-orange-600 px-8 py-3 rounded-lg font-semibold transition"
+        >
+          Start Coding
+        </button>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          <FeatureCard
-            title="AI Code Analysis"
-            desc="AI reviews your code, finds mistakes, and explains how to fix them."
-          />
+        <button
+          onClick={handleLearn}
+          className="border border-orange-500 text-orange-400 px-8 py-3 rounded-lg font-semibold hover:bg-orange-500 hover:text-white transition"
+        >
+          Learn Programming
+        </button>
+      </div>
 
-          <FeatureCard
-            title="Topic-wise DSA"
-            desc="Arrays, Strings, Trees, Graphs, DP – structured learning."
-          />
-
-          <FeatureCard
-            title="Built-in Compiler"
-            desc="Write and submit code directly. No setup required."
-          />
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="relative z-20 mt-32 py-8 text-center text-gray-500 text-sm">
-        © 2026 CodeOjas · Learn. Code. Grow.
-      </footer>
-    </div>
-  );
-}
-
-/* ---------- Feature Card ---------- */
-function FeatureCard({
-  title,
-  desc,
-}: {
-  title: string;
-  desc: string;
-}) {
-  return (
-    <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800 hover:border-indigo-500 transition">
-      <h4 className="text-xl font-semibold mb-3">{title}</h4>
-      <p className="text-gray-400">{desc}</p>
     </div>
   );
 }

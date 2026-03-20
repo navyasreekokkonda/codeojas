@@ -1,0 +1,53 @@
+/* FUTURISTIC GRID BACKGROUND */
+
+.futuristic-grid {
+  background-image: linear-gradient(rgba(255,115,0,0.08) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,115,0,0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(60px);
+  }
+}
+
+
+/* NEON TEXT */
+
+.neon-text {
+  text-shadow:
+    0 0 5px #ff7a18,
+    0 0 10px #ff7a18,
+    0 0 20px #ff7a18;
+}
+
+
+/* FUTURISTIC BUTTON */
+
+.futuristic-button {
+  padding: 16px 40px;
+  font-size: 18px;
+  border-radius: 14px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg,#ff7a18,#ffb347,#ff7a18);
+  background-size: 200% 200%;
+  animation: gradientMove 4s ease infinite;
+  box-shadow: 0 0 20px rgba(255,122,24,0.5);
+  transition: transform 0.2s;
+}
+
+.futuristic-button:hover {
+  transform: scale(1.05);
+}
+
+@keyframes gradientMove {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
