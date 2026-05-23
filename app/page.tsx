@@ -3,6 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
+
 const languages = ["Python", "JavaScript", "Java"];
 
 export default function HomePage() {
@@ -18,7 +26,31 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 relative">
+
+      {/* AUTH UI (TOP RIGHT) */}
+      <div className="absolute top-5 right-5 flex items-center gap-3">
+        <SignedOut>
+          <div className="flex gap-2">
+            <SignInButton>
+              <button className="px-4 py-2 bg-white text-black rounded-md">
+                Sign In
+              </button>
+            </SignInButton>
+
+            <SignUpButton>
+              <button className="px-4 py-2 border border-white rounded-md">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </div>
+        </SignedOut>
+
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+      </div>
+
       {/* HERO */}
       <h1 className="text-5xl font-bold mb-6 text-center">
         Master Coding with Practice and Learning
@@ -65,7 +97,6 @@ export default function HomePage() {
           Learn Programming
         </button>
       </div>
-
     </div>
   );
 }
