@@ -12,6 +12,16 @@ const topics = [
   "Trees",
   "Graphs",
   "Dynamic Programming",
+  "Tries",
+  "Segmented Trees",
+  "linked Lists";
+  "Sorting",
+  "Searching",
+  "Heaps",
+  "Hashing",
+  "Recursion",
+  "Backtracking",
+    
 ];
 
 const levels = ["Easy", "Medium", "Hard"];
