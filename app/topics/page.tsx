@@ -14,14 +14,13 @@ const topics = [
   "Dynamic Programming",
   "Tries",
   "Segmented Trees",
-  "linked Lists";
+  "Linked Lists",
   "Sorting",
   "Searching",
   "Heaps",
   "Hashing",
   "Recursion",
   "Backtracking",
-    
 ];
 
 const levels = ["Easy", "Medium", "Hard"];
@@ -31,14 +30,12 @@ function TopicsContent() {
   const language = searchParams.get("lang") || "python";
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden p-10">
-
-      {/* Background Glow (soft, not affecting buttons) */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-orange-500 opacity-10 blur-[120px]" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-400 opacity-10 blur-[120px]" />
+    <div className="min-h-screen bg-black text-white relative overflow-hidden p-10 select-auto">
+      {/* Background Glow */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-orange-500 opacity-10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-400 opacity-10 blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
-
         {/* Title */}
         <h1 className="text-5xl font-extrabold mb-12 text-center">
           Choose <span className="text-orange-500">Topic</span>
@@ -51,7 +48,6 @@ function TopicsContent() {
 
         {/* Topics Grid */}
         <div className="grid md:grid-cols-2 gap-8">
-
           {topics.map((topic) => (
             <div
               key={topic}
@@ -70,11 +66,10 @@ function TopicsContent() {
               </h2>
 
               <div className="flex gap-4 flex-wrap">
-
                 {levels.map((level) => (
                   <Link
                     key={level}
-                    href={`/question?topic=${topic}&level=${level}&lang=${language}`}
+                    href={`/question?topic=${encodeURIComponent(topic)}&level=${level}&lang=${language}`}
                     className="
                     px-5
                     py-2
@@ -92,13 +87,10 @@ function TopicsContent() {
                     {level}
                   </Link>
                 ))}
-
               </div>
             </div>
           ))}
-
         </div>
-
       </div>
     </div>
   );
